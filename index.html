@@ -2,98 +2,93 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>🪵 Minecraft Wood Soundboard</title>
+  <title>🔨 Minecraft “Dig” Soundboard</title>
   <style>
     body {
-      background: #7ec850;
+      background: #8d5524;
+      color: #fff;
       font-family: sans-serif;
       text-align: center;
       padding: 2rem;
-      color: #333;
     }
-
-    h1 {
-      margin-bottom: 1rem;
-      text-shadow: 1px 1px 0 #fff;
-    }
-
+    h1 { margin-bottom: 1rem; text-shadow: 0 1px 2px #000; }
     .board {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-      gap: 1rem;
+      grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+      gap: 0.75rem;
       max-width: 600px;
       margin: 0 auto;
     }
-
     .sound-btn {
       position: relative;
-      width: 100%;
-      padding-top: 100%; /* 1:1 square */
+      padding: 0;
+      border: 2px solid #321a0a;
+      border-radius: 6px;
       background: repeating-linear-gradient(
         45deg,
-        #c59b6b 0,
-        #c59b6b 10px,
-        #ad854d 10px,
-        #ad854d 20px
+        #a17454 0,   #a17454 8px,
+        #8b5e3c 8px, #8b5e3c 16px
       );
-      border: 3px solid #86592d;
-      border-radius: 8px;
-      box-shadow:
-        inset 0 0 5px rgba(0,0,0,0.5),
-        2px 2px 5px rgba(0,0,0,0.3);
       cursor: pointer;
-      overflow: hidden;
       outline: none;
+      overflow: hidden;
+      user-select: none;
+      height: 80px;
     }
-
     .sound-btn:active {
       transform: translateY(2px);
-      box-shadow:
-        inset 0 0 3px rgba(0,0,0,0.7),
-        1px 1px 3px rgba(0,0,0,0.2);
+      box-shadow: inset 0 0 4px rgba(0,0,0,0.6);
     }
-
     .sound-btn span {
       position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      font-size: 2rem;
+      top: 50%; left: 50%;
+      transform: translate(-50%,-50%);
+      font-size: 1.5rem;
     }
-
     .label {
-      margin-top: 0.5rem;
-      font-size: 0.9rem;
+      font-size: 0.8rem;
+      margin-top: 0.25rem;
+      color: #eee;
     }
   </style>
 </head>
 <body>
-  <h1>🪵 Minecraft Wood Soundboard</h1>
-  <div class="board">
-    <div>
-      <button class="sound-btn" data-sound="wood1.ogg"><span>🪵</span></button>
-      <div class="label">Wood 1</div>
-    </div>
-    <div>
-      <button class="sound-btn" data-sound="wood2.ogg"><span>🪵</span></button>
-      <div class="label">Wood 2</div>
-    </div>
-    <div>
-      <button class="sound-btn" data-sound="wood3.ogg"><span>🪵</span></button>
-      <div class="label">Wood 3</div>
-    </div>
-    <div>
-      <button class="sound-btn" data-sound="wood4.ogg"><span>🪵</span></button>
-      <div class="label">Wood 4</div>
-    </div>
-  </div>
+  <h1>🔨 “Dig” Soundboard</h1>
+  <div class="board" id="dig-board"></div>
 
   <script>
-    document.querySelectorAll('.sound-btn').forEach(btn => {
+    // 1) Make an array of your dig files (no extension)
+    const digFiles = [
+      'stone1','stone2','stone3','stone4',
+      'sand1','sand2','sand3','sand4',
+      'gravel1','gravel2','gravel3','gravel4',
+      'cloth1','cloth2','cloth3','cloth4',
+      'grass1','grass2','grass3','grass4',
+      'snow1','snow2','snow3','snow4',
+      'wood1','wood2','wood3','wood4'
+    ];
+
+    const board = document.getElementById('dig-board');
+
+    // 2) For each name, create a button + label
+    digFiles.map(name => {
+      const wrapper = document.createElement('div');
+
+      const btn = document.createElement('button');
+      btn.className = 'sound-btn';
+      btn.innerHTML = `<span>⛏️</span>`;
       btn.addEventListener('click', () => {
-        const audio = new Audio(btn.dataset.sound);
+        const audio = new Audio(`dig/${name}.ogg`);
         audio.play();
       });
+
+      const label = document.createElement('div');
+      label.className = 'label';
+      label.textContent = name;  // you can prettify this if you like
+
+      wrapper.appendChild(btn);
+      wrapper.appendChild(label);
+      board.appendChild(wrapper);
     });
   </script>
 </body>
