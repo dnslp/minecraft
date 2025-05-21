@@ -2,16 +2,25 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>🔨 Minecraft “Dig” Soundboard</title>
+  <title>🎮 Minecraft Soundboard</title>
   <style>
     body {
-      background: #8d5524;
+      background: #222;
       color: #fff;
       font-family: sans-serif;
       text-align: center;
       padding: 2rem;
     }
-    h1 { margin-bottom: 1rem; text-shadow: 0 1px 2px #000; }
+    h1 {
+      margin-bottom: 0.5rem;
+      text-shadow: 0 1px 2px #000;
+    }
+    h2 {
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+      color: #ddd;
+      text-shadow: 0 1px 2px #000;
+    }
     .board {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
@@ -21,7 +30,6 @@
     }
     .sound-btn {
       position: relative;
-      padding: 0;
       border: 2px solid #321a0a;
       border-radius: 6px;
       background: repeating-linear-gradient(
@@ -33,14 +41,25 @@
       outline: none;
       overflow: hidden;
       user-select: none;
-      height: 80px;
       width: 80px;
+      height: 80px;
     }
-    .sound-btn:active {
+    /* Different background for skeleton buttons */
+    .skeleton-btn {
+      background: repeating-linear-gradient(
+        45deg,
+        #999 0,   #999 8px,
+        #ccc 8px, #ccc 16px
+      );
+      border-color: #666;
+    }
+    .sound-btn:active,
+    .skeleton-btn:active {
       transform: translateY(2px);
       box-shadow: inset 0 0 4px rgba(0,0,0,0.6);
     }
-    .sound-btn span {
+    .sound-btn span,
+    .skeleton-btn span {
       position: absolute;
       top: 50%; left: 50%;
       transform: translate(-50%,-50%);
@@ -50,15 +69,23 @@
       font-size: 0.8rem;
       margin-top: 0.25rem;
       color: #eee;
+      text-transform: capitalize;
     }
   </style>
 </head>
 <body>
-  <h1>🔨 “Dig” Soundboard</h1>
+  <h1>🎵 Minecraft Soundboard</h1>
+
+  <!-- DIG SECTION -->
+  <h2>🔨 Dig Sounds</h2>
   <div class="board" id="dig-board"></div>
 
+  <!-- SKELETON SECTION -->
+  <h2>💀 Skeleton Sounds</h2>
+  <div class="board" id="skeleton-board"></div>
+
   <script>
-    // 1) Make an array of your dig files (no extension)
+    // Dig files (no extension)
     const digFiles = [
       'stone1','stone2','stone3','stone4',
       'sand1','sand2','sand3','sand4',
@@ -69,28 +96,41 @@
       'wood1','wood2','wood3','wood4'
     ];
 
-    const board = document.getElementById('dig-board');
+    // Skeleton files (no extension)
+    const skeletonFiles = [
+      'death',
+      'hurt1','hurt2','hurt3','hurt4',
+      'say1','say2','say3',
+      'step1','step2','step3','step4'
+    ];
 
-    // 2) For each name, create a button + label
-    digFiles.map(name => {
-      const wrapper = document.createElement('div');
+    function makeBoard(files, containerId, btnClass, emoji) {
+      const board = document.getElementById(containerId);
+      files.forEach(name => {
+        const wrapper = document.createElement('div');
 
-      const btn = document.createElement('button');
-      btn.className = 'sound-btn';
-      btn.innerHTML = `<span>⛏️</span>`;
-      btn.addEventListener('click', () => {
-        const audio = new Audio(`dig/${name}.ogg`);
-        audio.play();
+        // create button
+        const btn = document.createElement('button');
+        btn.className = btnClass;
+        btn.innerHTML = `<span>${emoji}</span>`;
+        btn.addEventListener('click', () => {
+          new Audio(`${containerId.replace('-board','')}/${name}.ogg`).play();
+        });
+
+        // label
+        const label = document.createElement('div');
+        label.className = 'label';
+        label.textContent = name;
+
+        wrapper.appendChild(btn);
+        wrapper.appendChild(label);
+        board.appendChild(wrapper);
       });
+    }
 
-      const label = document.createElement('div');
-      label.className = 'label';
-      label.textContent = name;  // you can prettify this if you like
-
-      wrapper.appendChild(btn);
-      wrapper.appendChild(label);
-      board.appendChild(wrapper);
-    });
+    // build both boards
+    makeBoard(digFiles,       'dig-board',       'sound-btn',     '⛏️');
+    makeBoard(skeletonFiles, 'skeleton-board',  'skeleton-btn',  '💀');
   </script>
 </body>
 </html>
